@@ -1,4 +1,4 @@
-<div id="app"></div>
+<!-- <div id="app"></div> -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,52 +10,42 @@
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
-      .div1 {
-        width: 310px;
-        height: 100px;
-        background-color: green;
+      .capa {
+        width: auto;
+        height: 200px;
+        background-color: #7ec4cf;
+        opacity: 0.8; /* nível de transparência */
         /* position: relative;  */
         z-index: 0; /* Define a ordem de empilhamento, div1 estará abaixo de div2 */
-      }
-
-      .div3 {
-        width: 300px;
-        height: 100px;
-        background-color: pink;
-        top: 20px; /* Define a distância do topo */
-        left: 20px; /* Define a distância da esquerda */
-        border: 1px solid red;
-        opacity: 0.6; /* nível de transparência */
       }
 
       .wrapper {
         /* envolve todo o container do scroll*/
         position: relative;
-        background-color: transparent;
-        width: 300px;
-        height: 100px;
-        border: 0px solid red;
-        border-radius: 0px;
-        top: -40px; /* o quanto acima da div1 o scrollContainer deve se sobrepor*/
+        margin-left: 10px;
+        top: -64px; /* o quanto acima da div1 o scrollContainer deve se sobrepor*/
         z-index: 1; /*posiciona o scrollContainer sobre a div1*/
       }
 
-      .wrapper > h5 {
+      .title {
         color: white; /* título fora da área do scroll*/
         text-align: left;
         padding: 0 15px;
+        font-size: 24px;
+        font-weight: 600;
       }
 
       /* css para scrollar cada div */
       .container {
-        background-color: transparent;
-        background-color: orange;
+        /* background-color: #daeaf6; */
         border-radius: 8px;
-        width: 300px;
+        width: auto;
         height: 80px;
-        padding: 0px 12px;
+        /* padding: 0px 12px; */ 
+        margin: 0px 12px;
         overflow: hidden; /* faz o scrollable ser exibido dentro dos limites de container*/
         position: relative; /* serve de base para que scrollable se sobreponha*/
         z-index: 1; /* div container no mesmo nível do wrapper*/
@@ -63,7 +53,7 @@
 
       .scrollable {
         border-radius: 8px;
-        background-color: lightblue;
+        background-color: transparent;
         top: 10px; /* Define a distância do topo em relação ao container*/
         display: flex; /* divs posicionadas horizontalmente */
         gap: 15px; /* distância entre os cards */
@@ -77,12 +67,12 @@
 
       .scrollable > div {
         /* usado como referẽncia para criar os bullets*/
-        border-radius: 8px;
-        background-color: yellow;
+        border-radius: 8px; /*borda de cada card*/
+        border: 5px double white;
         width: 300px; /* Largura fixa */
         height: 60px; /* Altura fixa */
-        background-color: red;
-        color: white;
+        background-color: #9cadce; /*cor de cada card*/
+        color: white; /*cor do texto */
         text-align: center; /*centraliza horizontalmente o texto*/
         line-height: 50px; /* Centraliza verticalmente o texto */
       }
@@ -90,8 +80,9 @@
       /* bullets de navegação */
       .bullet-container {
         text-align: center;
-        padding-top: 10px;
-        background-color: black;
+        padding: 10px;
+        /* background-color: #d1cfe2; */
+        width: auto;
       }
 
       .bullet {
@@ -99,7 +90,7 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: gray;
+        background-color: #9cadce;
         margin: 5px;
         cursor: pointer;
       }
@@ -107,17 +98,18 @@
       .bullet.active {
         width: 15px;
         height: 15px;
-        background-color: green;
+        background-color: white;
+        border: 2px solid #9cadce;
         margin-top: -3px;
         margin-bottom: 3px;
       }
     </style>
   </head>
   <body>
-    <div class="div1"></div>
+    <div class="capa"></div>
 
     <div class="wrapper">
-      <h5>scrollable</h5>
+      <p class="title">Trilho de cards</p>
       <div class="container">
         <div class="scrollable" draggable="true">
           <div>01/12 algo</div>
@@ -135,11 +127,9 @@
         </div>
       </div>
       <div class="bullet-container" id="bulletContainer">
-        <!-- Bullets serão adicionadas aqui -->
+        
       </div>
     </div>
-
-    <div class="div3"></div>
 
     <script>
       //script para scrollable-------------------------------------------------
