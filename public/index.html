@@ -1,0 +1,216 @@
+<div id="app"></div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sobrepondo Div scrollável sobre outra div</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      .div1 {
+        width: 310px;
+        height: 100px;
+        background-color: green;
+        /* position: relative;  */
+        z-index: 0; /* Define a ordem de empilhamento, div1 estará abaixo de div2 */
+      }
+
+      .div3 {
+        width: 300px;
+        height: 100px;
+        background-color: pink;
+        top: 20px; /* Define a distância do topo */
+        left: 20px; /* Define a distância da esquerda */
+        border: 1px solid red;
+        opacity: 0.6; /* nível de transparência */
+      }
+
+      .wrapper {
+        /* envolve todo o container do scroll*/
+        position: relative;
+        background-color: transparent;
+        width: 300px;
+        height: 100px;
+        border: 0px solid red;
+        border-radius: 0px;
+        top: -40px; /* o quanto acima da div1 o scrollContainer deve se sobrepor*/
+        z-index: 1; /*posiciona o scrollContainer sobre a div1*/
+      }
+
+      .wrapper > h5 {
+        color: white; /* título fora da área do scroll*/
+        text-align: left;
+        padding: 0 15px;
+      }
+
+      /* css para scrollar cada div */
+      .container {
+        background-color: transparent;
+        background-color: orange;
+        border-radius: 8px;
+        width: 300px;
+        height: 80px;
+        padding: 0px 12px;
+        overflow: hidden; /* faz o scrollable ser exibido dentro dos limites de container*/
+        position: relative; /* serve de base para que scrollable se sobreponha*/
+        z-index: 1; /* div container no mesmo nível do wrapper*/
+      }
+
+      .scrollable {
+        border-radius: 8px;
+        background-color: lightblue;
+        top: 10px; /* Define a distância do topo em relação ao container*/
+        display: flex; /* divs posicionadas horizontalmente */
+        gap: 15px; /* distância entre os cards */
+        white-space: nowrap;
+        font-size: 30px;
+        cursor: grab;
+        padding-right: 10px;
+        position: absolute; /* absoluto em relação à div container */
+        z-index: 2; /* Define a ordem de empilhamento, div scrollable acima de container */
+      }
+
+      .scrollable > div {
+        /* usado como referẽncia para criar os bullets*/
+        border-radius: 8px;
+        background-color: yellow;
+        width: 300px; /* Largura fixa */
+        height: 60px; /* Altura fixa */
+        background-color: red;
+        color: white;
+        text-align: center; /*centraliza horizontalmente o texto*/
+        line-height: 50px; /* Centraliza verticalmente o texto */
+      }
+
+      /* bullets de navegação */
+      .bullet-container {
+        text-align: center;
+        padding-top: 10px;
+        background-color: black;
+      }
+
+      .bullet {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: gray;
+        margin: 5px;
+        cursor: pointer;
+      }
+
+      .bullet.active {
+        width: 15px;
+        height: 15px;
+        background-color: green;
+        margin-top: -3px;
+        margin-bottom: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="div1"></div>
+
+    <div class="wrapper">
+      <h5>scrollable</h5>
+      <div class="container">
+        <div class="scrollable" draggable="true">
+          <div>01/12 algo</div>
+          <div>02/12 para</div>
+          <div>03/12 scrollar</div>
+          <div>04/12 ao</div>
+          <div>05/12 clicar</div>
+          <div>06/12 com</div>
+          <div>07/12 o</div>
+          <div>08/12 mouse</div>
+          <div>09/12 um</div>
+          <div>10/12 texto</div>
+          <div>11/12 muito</div>
+          <div>12/12 longo</div>
+        </div>
+      </div>
+      <div class="bullet-container" id="bulletContainer">
+        <!-- Bullets serão adicionadas aqui -->
+      </div>
+    </div>
+
+    <div class="div3"></div>
+
+    <script>
+      //script para scrollable-------------------------------------------------
+      const container = document.querySelector('.container');
+      const scrollable = document.querySelector('.scrollable');
+
+      let isScrolling = false;
+      let startPosition = 0;
+      let scrollPosition = 0;
+
+      container.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isScrolling = true;
+        startPosition = e.clientX;
+        scrollPosition = container.scrollLeft;
+        scrollable.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isScrolling) return;
+        const delta = e.clientX - startPosition;
+        container.scrollLeft = scrollPosition - delta;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isScrolling = false;
+        scrollable.style.cursor = 'grab';
+      });
+
+      //bullets de navegação------------------------------------------------------
+
+      const bulletContainer = document.getElementById('bulletContainer');
+
+      // Função para criar bullets
+      function createBullets() {
+        const divs = document.querySelectorAll('.scrollable > div');
+        divs.forEach((div, index) => {
+          const bullet = document.createElement('div');
+          bullet.className = 'bullet';
+          bullet.addEventListener('click', () => scrollToDiv(index));
+          bulletContainer.appendChild(bullet);
+        });
+      }
+
+      // Função para rolar até a div correspondente à bullet clicada
+      function scrollToDiv(index) {
+        const divs = document.querySelectorAll('.scrollable > div');
+        const divToScroll = divs[index];
+        container.scrollLeft = divToScroll.offsetLeft;
+      }
+
+      // Atualiza as bullets com base na posição atual do scroll
+      function updateBullets() {
+        const divs = document.querySelectorAll('.scrollable > div');
+        const scrollLeft = container.scrollLeft;
+        divs.forEach((div, index) => {
+          const bullet = bulletContainer.children[index];
+          if (
+            scrollLeft >= div.offsetLeft &&
+            scrollLeft < div.offsetLeft + div.clientWidth
+          ) {
+            bullet.classList.add('active');
+          } else {
+            bullet.classList.remove('active');
+          }
+        });
+      }
+
+      // Cria as bullets e atualiza quando o scroll é alterado
+      createBullets();
+      container.addEventListener('scroll', updateBullets);
+    </script>
+  </body>
+</html>
